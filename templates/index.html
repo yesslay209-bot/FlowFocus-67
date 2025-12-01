@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FocusFlow by Grace Chen</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <!-- 🌸 Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='bunny.png') }}" alt="Logo" class="nav-logo">
+      <span class="nav-title">FocusFlow</span>
+    </div>
+    <div class="nav-right">
+      <a href="{{ url_for('home') }}" class="nav-link active">Home</a>
+      <a href="{{ url_for('pomo') }}" class="nav-link">Pomo</a>
+      <a href="#" class="nav-link">Bunny Streak</a>
+      <a href="#" class="nav-link">Music</a>
+      <a href="#" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+  <!-- 🌼 Main Content - Two Column Layout -->
+  <div class="home-container">
+    
+    <!-- LEFT SIDE -->
+    <div class="home-left">
+      <!-- Logo and Title -->
+      <div class="home-header">
+        <h1 class="home-title">FocusFlow</h1>
+        <p class="home-subtitle">by Grace Chen</p>
+      </div>
+
+      <!-- Quote Section -->
+      <div class="quote-box">
+        <p class="quote-text" id="quote">{{ quote_focus }}</p>
+      </div>
+
+      <!-- Pet Bunny Box -->
+      <div class="pet-bunny-box">
+        <h3 class="pet-title">Your Pet Bunny</h3>
+        <div class="bunny-container">
+          <img src="{{ url_for('static', filename='bunny.png') }}" alt="Pet Bunny" class="pet-bunny" id="bunny">
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="home-right">
+      <!-- Study Streak -->
+      <div class="streak-card">
+        <div class="streak-icon">🔥</div>
+        <div class="streak-info">
+          <p class="streak-label">Study Streak</p>
+          <p class="streak-number" id="streak">{{ streak }}</p>
+          <p class="streak-sublabel">days</p>
+        </div>
+      </div>
+
+      <!-- Clock Circle -->
+      <div class="clock-circle">
+        <svg class="clock-svg" viewBox="0 0 200 200">
+          <!-- Background circle -->
+          <circle cx="100" cy="100" r="95" class="clock-bg"></circle>
+          
+          <!-- Clock numbers -->
+          <text x="100" y="20" text-anchor="middle" class="clock-number">12</text>
+          <text x="180" y="105" text-anchor="middle" class="clock-number">3</text>
+          <text x="100" y="190" text-anchor="middle" class="clock-number">6</text>
+          <text x="20" y="105" text-anchor="middle" class="clock-number">9</text>
+          
+          <!-- Hour hand -->
+          <line x1="100" y1="100" x2="100" y2="60" class="hand hour-hand" id="hourHand"></line>
+          
+          <!-- Minute hand -->
+          <line x1="100" y1="100" x2="100" y2="30" class="hand minute-hand" id="minuteHand"></line>
+          
+          <!-- Center dot -->
+          <circle cx="100" cy="100" r="5" class="clock-center"></circle>
+        </svg>
+        
+        <!-- Digital time display -->
+        <div class="digital-time" id="digitalTime">00:00</div>
+        <p class="date-display" id="dateDisplay">Loading...</p>
+      </div>
+    </div>
+
+  </div> <!-- ✅ END home-container -->
+
+  <!-- 🌸 Clock Script -->
+  <script>
+    function updateClock() {
+      const now = new Date();
+      
+      // Update digital time
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('digitalTime').textContent = `${hours}:${minutes}`;
+      
+      // Update date
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const dateStr = now.toLocaleDateString('en-US', options);
+      document.getElementById('dateDisplay').textContent = dateStr;
+      
+      // Calculate clock hands rotation
+      const seconds = now.getSeconds();
+      const minutes_val = now.getMinutes();
+      const hours_val = now.getHours() % 12;
+      
+      // Minute hand: 6 degrees per minute (360 / 60)
+      const minuteRotation = minutes_val * 6 + seconds * 0.1;
+      document.getElementById('minuteHand').style.transform = `rotate(${minuteRotation}deg)`;
+      document.getElementById('minuteHand').style.transformOrigin = '100px 100px';
+      
+      // Hour hand: 30 degrees per hour (360 / 12) + 0.5 degrees per minute
+      const hourRotation = hours_val * 30 + minutes_val * 0.5;
+      document.getElementById('hourHand').style.transform = `rotate(${hourRotation}deg)`;
+      document.getElementById('hourHand').style.transformOrigin = '100px 100px';
+    }
+    
+    // Update clock immediately and then every second
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+
+</body>
+</html>
