@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bunny Streak - FocusFlow</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .cards {display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:16px}
+    .card {width:150px;height:200px;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;box-shadow:0 4px 8px rgba(0,0,0,0.08);}
+    .emoji {font-size:36px}
+    .card-name{font-weight:600;margin-top:8px;text-align:center}
+    .claim-btn{margin-top:10px;padding:6px 10px;border-radius:8px;border:none;background:#6ECF9A;color:#fff;cursor:pointer}
+    .disabled{opacity:0.5;cursor:not-allowed}
+    .section{max-width:900px;margin:0 auto;padding:12px}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='bunny.png') }}" alt="Logo" class="nav-logo">
+      <span class="nav-title">FocusFlow</span>
+    </div>
+    <div class="nav-right">
+      <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+      <a href="{{ url_for('pomo') }}" class="nav-link">Pomo</a>
+      <a href="{{ url_for('bunnies_page') }}" class="nav-link active">Bunny Streak</a>
+    </div>
+  </nav>
+
+  <div class="section" style="display:flex;gap:20px;align-items:flex-start;">
+    <div style="flex:1">
+      <h1>Bunny Streak</h1>
+      <p>Collect cute bunnies like cards. Each day you extend your streak you get to choose one of the daily cards.</p>
+
+      <div class="cards" id="slots" style="justify-content:flex-start;flex-wrap:wrap;">
+        {% set collected = user_data.collection %}
+        {% for b in bunnies[:7] %}
+          {% set is_collected = b.id in collected %}
+          {% set unlocked = user_data.streak >= b.unlock_streak %}
+          <div class="card {% if is_collected %}collected{% elif unlocked %}unlocked{% else %}locked{% endif %}" style="background: {{ b.color }};margin:8px;position:relative;width:140px;height:190px;">
+            <div class="emoji">{{ b.emoji }}</div>
+            <div class="card-name">{{ b.name }}</div>
+            <div class="card-desc">{{ b.desc }}</div>
+            {% if is_collected %}
+              <div style="position:absolute;top:8px;right:8px;background:#fff;border-radius:8px;padding:4px 6px;font-size:12px">Collected</div>
+            {% elif not unlocked %}
+              <div style="position:absolute;bottom:8px;left:8px;background:rgba(0,0,0,0.6);color:#fff;padding:6px;border-radius:6px;font-size:12px">Locked — {{ b.unlock_streak }}d</div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <h2 style="margin-top:24px">Today's Options</h2>
+      <div id="options-area">
+        {% if user_data.available_date %}
+          <p>Available date: {{ user_data.available_date }}</p>
+        {% endif %}
+
+        <div class="cards" id="options">
+          {% if user_data.available_options %}
+            {% for opt_id in user_data.available_options %}
+              {% for b in bunnies %}
+                {% if b.id == opt_id %}
+                  <div class="card" style="background: {{ b.color }}" data-id="{{ b.id }}">
+                    <div class="emoji">{{ b.emoji }}</div>
+                    <div class="card-name">{{ b.name }}</div>
+                    <div class="card-desc">{{ b.desc }}</div>
+                    {% if not user_data.available_claimed and user_data.streak >= b.unlock_streak %}
+                      <button class="claim-btn" onclick="claimCard('{{ b.id }}')">Claim</button>
+                    {% elif not user_data.available_claimed and user_data.streak < b.unlock_streak %}
+                      <button class="claim-btn disabled" disabled>Locked</button>
+                    {% else %}
+                      <button class="claim-btn disabled" disabled>Claimed</button>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          {% else %}
+            <p>No card options available right now — keep building your streak!</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <aside style="width:260px;flex-shrink:0;">
+      <div style="background:#fff;padding:16px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
+        <h3>Your Streak</h3>
+        <div style="font-size:40px;font-weight:700">{{ user_data.streak }}</div>
+        <p>Days in a row</p>
+        <hr />
+        <h4>Next Unlocks</h4>
+        <ul style="padding-left:18px">
+          {% for b in bunnies %}
+            {% if b.id not in collected %}
+              <li style="margin-bottom:6px">{{ b.name }} — {{ b.unlock_streak }} days {% if user_data.streak >= b.unlock_streak %}(available){% endif %}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+<script>
+  async function claimCard(cardId){
+    const res = await fetch('/claim_card', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({card_id: cardId})
+    });
+    const data = await res.json();
+    if(res.ok){
+      // simple refresh to show collection update
+      location.reload();
+    } else {
+      alert(data.error || 'Could not claim card');
+    }
+  }
+</script>
+</body>
+</html>

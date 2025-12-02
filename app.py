@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import random, json, os
 from datetime import date
 
@@ -20,12 +20,38 @@ QUOTES_BREAK = [
     "Rest isn’t wasting time — it’s recharging your light."
 ]
 
+# Bunny "card" definitions (simple visual via emoji + color)
+# 7 bunnies with unlock streak thresholds (days of streak required)
+BUNNIES = [
+    {"id": "bunny_apple", "name": "Apple Bunny", "emoji": "🍎🐰", "color": "#FFD6D6", "desc": "Sweet and energetic.", "unlock_streak": 1},
+    {"id": "bunny_moon", "name": "Moon Bunny", "emoji": "🌙🐰", "color": "#E6E6FF", "desc": "Calm nighttime companion.", "unlock_streak": 2},
+    {"id": "bunny_flow", "name": "Flow Bunny", "emoji": "🌊🐰", "color": "#D6F0FF", "desc": "Focus like the flow.", "unlock_streak": 3},
+    {"id": "bunny_sun", "name": "Sun Bunny", "emoji": "☀️🐰", "color": "#FFF4D6", "desc": "Sunny and motivating.", "unlock_streak": 5},
+    {"id": "bunny_garden", "name": "Garden Bunny", "emoji": "🌸🐰", "color": "#FFE6F2", "desc": "Bloom with small steps.", "unlock_streak": 7},
+    {"id": "bunny_star", "name": "Star Bunny", "emoji": "⭐🐰", "color": "#E8F7FF", "desc": "Bright and curious.", "unlock_streak": 10},
+    {"id": "bunny_zen", "name": "Zen Bunny", "emoji": "🪷🐰", "color": "#F0FFF4", "desc": "Peaceful and wise.", "unlock_streak": 14}
+]
+
 def load_data():
     if not os.path.exists(DATA_FILE):
         with open(DATA_FILE, "w") as f:
-            json.dump({"completed_sessions": 0, "last_date": "", "streak": 0}, f, indent=4)
+            json.dump({
+                "completed_sessions": 0,
+                "last_date": "",
+                "streak": 0,
+                "collection": [],
+                "available_options": [],
+                "available_date": "",
+                "available_claimed": False
+            }, f, indent=4)
     with open(DATA_FILE, "r") as f:
-        return json.load(f)
+        data = json.load(f)
+    # Ensure keys exist for older files
+    data.setdefault("collection", [])
+    data.setdefault("available_options", [])
+    data.setdefault("available_date", "")
+    data.setdefault("available_claimed", False)
+    return data
 
 def save_data(data):
     with open(DATA_FILE, "w") as f:
@@ -51,17 +77,72 @@ def complete_session():
     # Update completed sessions
     data["completed_sessions"] += 1
 
-    # Update streak logic
+    # Update streak logic and generate daily card options when a new day is reached
+    new_card_generated = False
     if data["last_date"] == "":
         data["streak"] = 1
+        # generate options for the first day
+        data["available_options"] = random.sample([b["id"] for b in BUNNIES], k=min(3, len(BUNNIES)))
+        data["available_date"] = today
+        data["available_claimed"] = False
+        new_card_generated = True
     elif data["last_date"] == today:
         pass  # same day, do not add
     else:
         data["streak"] += 1
+        # generate a new set of options for today (excluding already collected)
+        # choose eligible bunnies: unlocked by streak and not already collected
+        eligible = [b["id"] for b in BUNNIES if b["unlock_streak"] <= data.get("streak", 0) and b["id"] not in data.get("collection", [])]
+        if not eligible:
+            # fallback to any remaining uncollected
+            eligible = [b["id"] for b in BUNNIES if b["id"] not in data.get("collection", [])]
+        if not eligible:
+            # if none left, allow repeats from all
+            eligible = [b["id"] for b in BUNNIES]
+        data["available_options"] = random.sample(eligible, k=min(3, len(eligible)))
+        data["available_date"] = today
+        data["available_claimed"] = False
+        new_card_generated = True
+
     data["last_date"] = today
 
     save_data(data)
-    return jsonify(data)
+    response = {"data": data, "new_card_generated": new_card_generated}
+    return jsonify(response)
+
+
+@app.route("/bunnies")
+def bunnies_page():
+    user_data = load_data()
+    return render_template("bunnies.html", bunnies=BUNNIES, user_data=user_data)
+
+
+@app.route('/claim_card', methods=['POST'])
+def claim_card():
+    payload = request.get_json() or {}
+    card_id = payload.get('card_id')
+    data = load_data()
+    today = str(date.today())
+    if data.get('available_date') != today:
+        return jsonify({'error': 'No available card for today'}), 400
+    if data.get('available_claimed'):
+        return jsonify({'error': 'Card already claimed'}), 400
+    if card_id not in data.get('available_options', []):
+        return jsonify({'error': 'Invalid card selected'}), 400
+
+    # ensure streak meets unlock requirement
+    card = next((b for b in BUNNIES if b['id'] == card_id), None)
+    if not card:
+        return jsonify({'error': 'Unknown card'}), 400
+    if data.get('streak', 0) < card.get('unlock_streak', 0):
+        return jsonify({'error': 'Streak too low to claim this card'}), 400
+
+    # add to collection
+    if card_id not in data['collection']:
+        data['collection'].append(card_id)
+    data['available_claimed'] = True
+    save_data(data)
+    return jsonify({'success': True, 'data': data})
 
 # navigate to the pomo page
 @app.route("/pomo")
