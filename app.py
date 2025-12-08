@@ -1,10 +1,17 @@
 from flask import Flask, render_template, jsonify, request
 import random, json, os
 from datetime import date
+from openai import OpenAI
+from dotenv import load_dotenv
+
+# Load environment variables from .env
+load_dotenv()
 
 app = Flask(__name__)
 
 DATA_FILE = "user_data.json"
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
 
 QUOTES_FOCUS = [
     "Small steps make big dreams bloom.",
@@ -23,13 +30,13 @@ QUOTES_BREAK = [
 # Bunny "card" definitions (simple visual via emoji + color)
 # 7 bunnies with unlock streak thresholds (days of streak required)
 BUNNIES = [
-    {"id": "bunny_apple", "name": "Apple Bunny", "emoji": "🍎🐰", "color": "#FFD6D6", "desc": "Sweet and energetic.", "unlock_streak": 1},
-    {"id": "bunny_moon", "name": "Moon Bunny", "emoji": "🌙🐰", "color": "#E6E6FF", "desc": "Calm nighttime companion.", "unlock_streak": 2},
-    {"id": "bunny_flow", "name": "Flow Bunny", "emoji": "🌊🐰", "color": "#D6F0FF", "desc": "Focus like the flow.", "unlock_streak": 3},
-    {"id": "bunny_sun", "name": "Sun Bunny", "emoji": "☀️🐰", "color": "#FFF4D6", "desc": "Sunny and motivating.", "unlock_streak": 5},
-    {"id": "bunny_garden", "name": "Garden Bunny", "emoji": "🌸🐰", "color": "#FFE6F2", "desc": "Bloom with small steps.", "unlock_streak": 7},
-    {"id": "bunny_star", "name": "Star Bunny", "emoji": "⭐🐰", "color": "#E8F7FF", "desc": "Bright and curious.", "unlock_streak": 10},
-    {"id": "bunny_zen", "name": "Zen Bunny", "emoji": "🪷🐰", "color": "#F0FFF4", "desc": "Peaceful and wise.", "unlock_streak": 14}
+    {"id": "bunny_apple", "name": "Apple Bunny", "emoji": "🍎🐰", "color": "#FFD6D6", "image": "pink.png", "desc": "Sweet and energetic.", "unlock_streak": 1},
+    {"id": "bunny_moon", "name": "Moon Bunny", "emoji": "🌙🐰", "color": "#E6E6FF", "image": "purple.png", "desc": "Calm nighttime companion.", "unlock_streak": 2},
+    {"id": "bunny_flow", "name": "Flow Bunny", "emoji": "🌊🐰", "color": "#D6F0FF", "image": "blue.png", "desc": "Focus like the flow.", "unlock_streak": 3},
+    {"id": "bunny_sun", "name": "Sun Bunny", "emoji": "☀️🐰", "color": "#FFF4D6", "image": "orange.png", "desc": "Sunny and motivating.", "unlock_streak": 5},
+    {"id": "bunny_garden", "name": "Garden Bunny", "emoji": "🌸🐰", "color": "#FFE6F2", "image": "green.png", "desc": "Bloom with small steps.", "unlock_streak": 7},
+    {"id": "bunny_star", "name": "Star Bunny", "emoji": "⭐🐰", "color": "#E8F7FF", "image": "boobunny.png", "desc": "Bright and curious.", "unlock_streak": 10},
+    {"id": "bunny_zen", "name": "Zen Bunny", "emoji": "🪷🐰", "color": "#F0FFF4", "image": "bunnboo.png", "desc": "Peaceful and wise.", "unlock_streak": 14}
 ]
 
 def load_data():
@@ -143,6 +150,33 @@ def claim_card():
     data['available_claimed'] = True
     save_data(data)
     return jsonify({'success': True, 'data': data})
+
+
+@app.route('/chat', methods=['POST'])
+def chat():
+    if not client:
+        return jsonify({'error': 'OpenAI API key not configured'}), 500
+    
+    payload = request.get_json() or {}
+    user_message = payload.get('message', '').strip()
+    
+    if not user_message:
+        return jsonify({'error': 'Message is empty'}), 400
+    
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful and encouraging focus buddy for the FocusFlow app. Help users stay motivated and focused. Be warm, supportive, and brief in your responses."},
+                {"role": "user", "content": user_message}
+            ],
+            max_tokens=150
+        )
+        bot_reply = response.choices[0].message.content
+        return jsonify({'reply': bot_reply})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 
 # navigate to the pomo page
 @app.route("/pomo")
