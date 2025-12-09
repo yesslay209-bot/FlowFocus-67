@@ -35,8 +35,8 @@ BUNNIES = [
     {"id": "bunny_flow", "name": "Flow Bunny", "emoji": "🌊🐰", "color": "#D6F0FF", "image": "blue.png", "desc": "Focus like the flow.", "unlock_streak": 3},
     {"id": "bunny_sun", "name": "Sun Bunny", "emoji": "☀️🐰", "color": "#FFF4D6", "image": "orange.png", "desc": "Sunny and motivating.", "unlock_streak": 5},
     {"id": "bunny_garden", "name": "Garden Bunny", "emoji": "🌸🐰", "color": "#FFE6F2", "image": "green.png", "desc": "Bloom with small steps.", "unlock_streak": 7},
-    {"id": "bunny_star", "name": "Star Bunny", "emoji": "⭐🐰", "color": "#E8F7FF", "image": "boobunny.png", "desc": "Bright and curious.", "unlock_streak": 10},
-    {"id": "bunny_zen", "name": "Zen Bunny", "emoji": "🪷🐰", "color": "#F0FFF4", "image": "bunnboo.png", "desc": "Peaceful and wise.", "unlock_streak": 14}
+    {"id": "bunny_star", "name": "Star Bunny", "emoji": "⭐🐰", "color": "#E8F7FF", "image": "blue.png", "desc": "Bright and curious.", "unlock_streak": 10},
+    {"id": "bunny_zen", "name": "Zen Bunny", "emoji": "🪷🐰", "color": "#F0FFF4", "image": "green.png", "desc": "Peaceful and wise.", "unlock_streak": 14}
 ]
 
 def load_data():
@@ -49,7 +49,8 @@ def load_data():
                 "collection": [],
                 "available_options": [],
                 "available_date": "",
-                "available_claimed": False
+                "available_claimed": False,
+                "selected_bunny": None
             }, f, indent=4)
     with open(DATA_FILE, "r") as f:
         data = json.load(f)
@@ -58,6 +59,7 @@ def load_data():
     data.setdefault("available_options", [])
     data.setdefault("available_date", "")
     data.setdefault("available_claimed", False)
+    data.setdefault("selected_bunny", None)
     return data
 
 def save_data(data):
@@ -178,6 +180,22 @@ def chat():
         return jsonify({'error': str(e)}), 500
 
 
+@app.route('/select_bunny', methods=['POST'])
+def select_bunny():
+    payload = request.get_json() or {}
+    bunny_id = payload.get('bunny_id')
+    data = load_data()
+    
+    # Check if bunny is in collection
+    if bunny_id not in data.get('collection', []):
+        return jsonify({'error': 'Bunny not in collection'}), 400
+    
+    # Set as selected bunny
+    data['selected_bunny'] = bunny_id
+    save_data(data)
+    return jsonify({'success': True, 'selected_bunny': bunny_id})
+
+
 # navigate to the pomo page
 @app.route("/pomo")
 def pomo():
@@ -189,6 +207,11 @@ def pomo():
                            quote_break=quote_break,
                            sessions=user_data["completed_sessions"],
                            streak=user_data["streak"])
+
+
+@app.route("/music")
+def music():
+    return render_template("music.html")
 
 
 if __name__ == "__main__":

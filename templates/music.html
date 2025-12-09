@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Music - FocusFlow</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .music-container {
+      max-width:1200px;
+      margin:0 auto;
+      padding:20px;
+    }
+    .playlist-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:20px;
+      margin-top:20px;
+    }
+    .playlist-card {
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      cursor:pointer;
+      transition:transform 0.2s, box-shadow 0.2s;
+    }
+    .playlist-card:hover {
+      transform:translateY(-4px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.12);
+    }
+    .playlist-thumb {
+      width:100%;
+      height:160px;
+      background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:48px;
+    }
+    .playlist-info {
+      padding:16px;
+    }
+    .playlist-title {
+      font-size:16px;
+      font-weight:600;
+      margin:0 0 8px 0;
+    }
+    .playlist-desc {
+      font-size:13px;
+      color:#666;
+      margin:0;
+    }
+    .player-section {
+      background:#fff;
+      border-radius:12px;
+      padding:20px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom:30px;
+    }
+    .player-section h2 {
+      margin-top:0;
+    }
+    .youtube-player {
+      width:100%;
+      aspect-ratio:16/9;
+      border-radius:8px;
+      overflow:hidden;
+      margin-top:12px;
+    }
+    .controls {
+      display:flex;
+      gap:10px;
+      margin-top:16px;
+    }
+    .btn {
+      padding:10px 16px;
+      background:#6ECF9A;
+      color:#fff;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:14px;
+      transition:background 0.2s;
+    }
+    .btn:hover {
+      background:#5ab880;
+    }
+    .btn-secondary {
+      background:#ddd;
+      color:#333;
+    }
+    .btn-secondary:hover {
+      background:#ccc;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🌸 Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='bunny.png') }}" alt="Logo" class="nav-logo">
+      <span class="nav-title">FocusFlow</span>
+    </div>
+    <div class="nav-right">
+      <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+      <a href="{{ url_for('pomo') }}" class="nav-link">Pomo</a>
+      <a href="{{ url_for('bunnies_page') }}" class="nav-link">Bunny Streak</a>
+      <a href="{{ url_for('music') }}" class="nav-link active">Music</a>
+      <a href="#" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+  <div class="music-container">
+    <h1>🎵 Focus Music</h1>
+    <p>Choose a playlist to help you stay focused and motivated</p>
+
+    <!-- Now Playing Section -->
+    <div class="player-section">
+      <h2>Now Playing</h2>
+      <div id="playerContainer">
+        <div style="text-align:center;padding:40px;color:#999;">Select a playlist to start playing</div>
+      </div>
+      <div class="controls">
+        <button class="btn" onclick="togglePlayback()">▶ Play / Pause</button>
+        <button class="btn btn-secondary" onclick="stopPlayback()">⏹ Stop</button>
+      </div>
+    </div>
+
+    <!-- Playlist Grid -->
+    <h2>Available Playlists</h2>
+    <div class="playlist-grid">
+      <!-- Lo-Fi Hip Hop -->
+      <div class="playlist-card" onclick="loadPlaylist('PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf', '🎧 Lo-Fi Hip Hop', 'Chill beats for focus and relaxation')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎧</div>
+        <div class="playlist-info">
+          <p class="playlist-title">Lo-Fi Hip Hop</p>
+          <p class="playlist-desc">Chill beats for focus and relaxation</p>
+        </div>
+      </div>
+
+      <!-- Ambient Music -->
+      <div class="playlist-card" onclick="loadPlaylist('PLrAXtmErZgOdS413sPwZvBiBTfLzQvosE', '🌊 Ambient Sounds', 'Peaceful ambient music for deep work')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🌊</div>
+        <div class="playlist-info">
+          <p class="playlist-title">Ambient Sounds</p>
+          <p class="playlist-desc">Peaceful ambient music for deep work</p>
+        </div>
+      </div>
+
+      <!-- Classical Music -->
+      <div class="playlist-card" onclick="loadPlaylist('PLrAXtmErZgOeL9yJF_gKJGR6jZkPiP3-N', '🎹 Classical Focus', 'Timeless classical pieces for concentration')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🎹</div>
+        <div class="playlist-info">
+          <p class="playlist-title">Classical Focus</p>
+          <p class="playlist-desc">Timeless classical pieces for concentration</p>
+        </div>
+      </div>
+
+      <!-- Study Music -->
+      <div class="playlist-card" onclick="loadPlaylist('PLrAXtmErZgOdvhKi5zqRVjzYWCF7vRGqF', '📚 Study Beats', 'Upbeat study music to boost productivity')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #fa709a 0%, #fee140 100%);">📚</div>
+        <div class="playlist-info">
+          <p class="playlist-title">Study Beats</p>
+          <p class="playlist-desc">Upbeat study music to boost productivity</p>
+        </div>
+      </div>
+
+      <!-- Rain & Nature Sounds -->
+      <div class="playlist-card" onclick="loadPlaylist('PLrAXtmErZgOezU1JdZ39tgL6-qEPdgJ6U', '🌧️ Rain & Nature', 'Calming nature sounds and rain')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #30cfd0 0%, #330867 100%);">🌧️</div>
+        <div class="playlist-info">
+          <p class="playlist-title">Rain & Nature</p>
+          <p class="playlist-desc">Calming nature sounds and rain</p>
+        </div>
+      </div>
+
+      <!-- Synthwave/Chillwave -->
+      <div class="playlist-card" onclick="loadPlaylist('PLrAXtmErZgOc3nVn_sSqr-eblBIoqXnMK', '🌅 Synthwave Chill', 'Modern electronic focus music')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">🌅</div>
+        <div class="playlist-info">
+          <p class="playlist-title">Synthwave Chill</p>
+          <p class="playlist-desc">Modern electronic focus music</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentPlayer = null;
+
+    function loadPlaylist(playlistId, title, description) {
+      const playerContainer = document.getElementById('playerContainer');
+      
+      // Create YouTube embed for playlist
+      const embedUrl = `https://www.youtube.com/embed/videoseries?list=${playlistId}&controls=1`;
+      
+      playerContainer.innerHTML = `
+        <div class="youtube-player">
+          <iframe 
+            width="100%" 
+            height="100%" 
+            src="${embedUrl}" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+          </iframe>
+        </div>
+        <div style="margin-top:12px;">
+          <h3 style="margin:8px 0;">${title}</h3>
+          <p style="color:#666;margin:0;">${description}</p>
+        </div>
+      `;
+      
+      currentPlayer = embedUrl;
+    }
+
+    function togglePlayback() {
+      if (!currentPlayer) {
+        alert('Please select a playlist first');
+        return;
+      }
+      // YouTube iframe autoplay is controlled by the user, we can't directly pause/play
+      alert('Use the YouTube player controls to pause/play');
+    }
+
+    function stopPlayback() {
+      if (!currentPlayer) {
+        alert('No playlist is currently playing');
+        return;
+      }
+      document.getElementById('playerContainer').innerHTML = `
+        <div style="text-align:center;padding:40px;color:#999;">Playback stopped. Select a playlist to resume.</div>
+      `;
+      currentPlayer = null;
+    }
+  </script>
+
+</body>
+</html>
