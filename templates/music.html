@@ -131,6 +131,15 @@
     <!-- Playlist Grid -->
     <h2>Available Playlists</h2>
     <div class="playlist-grid">
+      <!-- Your Video -->
+      <div class="playlist-card" onclick="loadPlaylist('mdJU5ogrPMY', '🎵 Your Video', 'Custom video', false)">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">🎵</div>
+        <div class="playlist-info">
+          <p class="playlist-title">Your Video</p>
+          <p class="playlist-desc">Custom video</p>
+        </div>
+      </div>
+
       <!-- Lo-Fi Hip Hop -->
       <div class="playlist-card" onclick="loadPlaylist('PLrAXtmErZgOeiKm4sgNOknGvNjby9efdf', '🎧 Lo-Fi Hip Hop', 'Chill beats for focus and relaxation')">
         <div class="playlist-thumb" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎧</div>
@@ -191,11 +200,16 @@
   <script>
     let currentPlayer = null;
 
-    function loadPlaylist(playlistId, title, description) {
+    function loadPlaylist(contentId, title, description, isPlaylist = true) {
       const playerContainer = document.getElementById('playerContainer');
       
-      // Create YouTube embed for playlist
-      const embedUrl = `https://www.youtube.com/embed/videoseries?list=${playlistId}&controls=1`;
+      // Create YouTube embed for playlist or single video
+      let embedUrl;
+      if (isPlaylist) {
+        embedUrl = `https://www.youtube.com/embed/videoseries?list=${contentId}&controls=1`;
+      } else {
+        embedUrl = `https://www.youtube.com/embed/${contentId}?controls=1`;
+      }
       
       playerContainer.innerHTML = `
         <div class="youtube-player">
@@ -219,7 +233,7 @@
 
     function togglePlayback() {
       if (!currentPlayer) {
-        alert('Please select a playlist first');
+        alert('Please select a playlist or video first');
         return;
       }
       // YouTube iframe autoplay is controlled by the user, we can't directly pause/play
@@ -228,11 +242,11 @@
 
     function stopPlayback() {
       if (!currentPlayer) {
-        alert('No playlist is currently playing');
+        alert('No video is currently playing');
         return;
       }
       document.getElementById('playerContainer').innerHTML = `
-        <div style="text-align:center;padding:40px;color:#999;">Playback stopped. Select a playlist to resume.</div>
+        <div style="text-align:center;padding:40px;color:#999;">Playback stopped. Select a playlist or video to resume.</div>
       `;
       currentPlayer = null;
     }
