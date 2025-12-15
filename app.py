@@ -166,13 +166,22 @@ def chat():
         return jsonify({'error': 'Message is empty'}), 400
     
     try:
+        # Provide the assistant with the bunny catalog so it can answer questions about them
+        system_content = (
+            "You are a helpful and encouraging focus buddy for the FocusFlow app. "
+            "Help users stay motivated and focused. Be warm, supportive, and brief in your responses.\n\n"
+            "Available bunnies (id, name, emoji, color, image, desc, unlock_streak):\n"
+            + json.dumps(BUNNIES)
+            + "\n\nWhen users ask about bunnies, reference this list: explain unlock requirements, descriptions, and image names. Keep replies short and friendly."
+        )
+
         response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful and encouraging focus buddy for the FocusFlow app. Help users stay motivated and focused. Be warm, supportive, and brief in your responses."},
+                {"role": "system", "content": system_content},
                 {"role": "user", "content": user_message}
             ],
-            max_tokens=150
+            max_tokens=200
         )
         bot_reply = response.choices[0].message.content
         return jsonify({'reply': bot_reply})
