@@ -30,13 +30,13 @@ QUOTES_BREAK = [
 # Bunny "card" definitions (simple visual via emoji + color)
 # 7 bunnies with unlock streak thresholds (days of streak required)
 BUNNIES = [
-    {"id": "bunny_apple", "name": "Apple Bunny", "emoji": "🍎🐰", "color": "#FFD6D6", "image": "pink.png", "desc": "Sweet and energetic.", "unlock_streak": 1},
-    {"id": "bunny_moon", "name": "Moon Bunny", "emoji": "🌙🐰", "color": "#E6E6FF", "image": "purple.png", "desc": "Calm nighttime companion.", "unlock_streak": 2},
-    {"id": "bunny_flow", "name": "Flow Bunny", "emoji": "🌊🐰", "color": "#D6F0FF", "image": "blue.png", "desc": "Focus like the flow.", "unlock_streak": 3},
-    {"id": "bunny_sun", "name": "Sun Bunny", "emoji": "☀️🐰", "color": "#FFF4D6", "image": "orange.png", "desc": "Sunny and motivating.", "unlock_streak": 5},
-    {"id": "bunny_garden", "name": "Garden Bunny", "emoji": "🌸🐰", "color": "#FFE6F2", "image": "green.png", "desc": "Bloom with small steps.", "unlock_streak": 7},
-    {"id": "bunny_star", "name": "Star Bunny", "emoji": "⭐🐰", "color": "#E8F7FF", "image": "blue.png", "desc": "Bright and curious.", "unlock_streak": 10},
-    {"id": "bunny_zen", "name": "Zen Bunny", "emoji": "🪷🐰", "color": "#F0FFF4", "image": "green.png", "desc": "Peaceful and wise.", "unlock_streak": 14}
+    {"id": "bunny_apple", "name": "Rosabelle", "emoji": "🌸🐰", "color": "#FFD6D6", "image": "pink.png", "desc": "Sweet and energetic.", "unlock_streak": 1},
+    {"id": "bunny_moon", "name": "Stella", "emoji": "🌙🐰", "color": "#E6E6FF", "image": "purple.png", "desc": "Calm nighttime companion.", "unlock_streak": 2},
+    {"id": "bunny_flow", "name": "Skylie", "emoji": "🦋🐰", "color": "#D6F0FF", "image": "blue.png", "desc": "Focus like the flow.", "unlock_streak": 3},
+    {"id": "bunny_sun", "name": "Berrybun", "emoji": "🍓🐰", "color": "#F9DBCE", "image": "orange.png", "desc": "Sunny and motivating.", "unlock_streak": 5},
+    {"id": "bunny_garden", "name": "Sprout", "emoji": "🌱🐰", "color": "#E5F9E5", "image": "green.png", "desc": "Bloom with small steps.", "unlock_streak": 7},
+    {"id": "bunny_star", "name": "Sunnie", "emoji": "🌻🐰", "color": "#FAF1C9", "image": "yellow.png", "desc": "Bright and curious.", "unlock_streak": 10},
+    {"id": "bunny_zen", "name": "Luma", "emoji": "🪷🐰", "color": "#FBF7F9", "image": "white.png", "desc": "Peaceful and wise.", "unlock_streak": 14}
 ]
 
 def load_data():
