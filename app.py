@@ -172,7 +172,7 @@ def chat():
             "Help users stay motivated and focused. Be warm, supportive, and brief in your responses.\n\n"
             "Available bunnies (id, name, emoji, color, image, desc, unlock_streak):\n"
             + json.dumps(BUNNIES)
-            + "\n\nWhen users ask about bunnies, reference this list: explain unlock requirements, descriptions, and image names. Keep replies short and friendly."
+            + "\n\nWhen users ask about bunnies, reference this list: explain unlock requirements, descriptions, and image names. Keep replies short and friendly. do not say the image information"
         )
 
         response = client.chat.completions.create(
