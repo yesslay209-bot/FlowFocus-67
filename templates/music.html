@@ -131,66 +131,57 @@
     <!-- Playlist Grid -->
     <h2>Available Playlists</h2>
     <div class="playlist-grid">
-      <!-- Your Video -->
-      <div class="playlist-card" onclick="loadPlaylist('mdJU5ogrPMY', '🎵 Your Video', 'Custom video', false)">
-        <div class="playlist-thumb" style="background:linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">🎵</div>
+      <!-- Classical Music (HALIDONMUSIC) -->
+      <div class="playlist-card" onclick="loadPlaylist('mdJU5ogrPMY', '🎹 Classical Music for Studying', 'HALIDONMUSIC — Classical pieces for focus')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🎹</div>
         <div class="playlist-info">
-          <p class="playlist-title">Your Video</p>
-          <p class="playlist-desc">Custom video</p>
+          <p class="playlist-title">Classical Music for Studying</p>
+          <p class="playlist-desc">HALIDONMUSIC — Classical pieces for focus</p>
         </div>
       </div>
 
       <!-- Lo-Fi Hip Hop -->
-      <div class="playlist-card" onclick="loadPlaylist('T9pQjiZPJi0', '🎧 Lo-Fi Hip Hop', 'Chill beats for focus and relaxation')">
+      <div class="playlist-card" onclick="loadPlaylist('T9pQjiZPJi0', '🎧 Lo-Fi Hip Hop', 'Slow life sound — Unlock Hyper Focus with this Studycore playlist')">
         <div class="playlist-thumb" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎧</div>
         <div class="playlist-info">
           <p class="playlist-title">Lo-Fi Hip Hop</p>
-          <p class="playlist-desc">Chill beats for focus and relaxation</p>
+          <p class="playlist-desc">Slow life sound — Studycore playlist</p>
         </div>
       </div>
 
-      <!-- Ambient Music -->
-      <div class="playlist-card" onclick="loadPlaylist('pjX9O7AhogM', '🌊 Ambient Sounds', 'Peaceful ambient music for deep work')">
-        <div class="playlist-thumb" style="background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🌊</div>
+      <!-- Cozy Cafe / Rainy Street Jazz -->
+      <div class="playlist-card" onclick="loadPlaylist('pjX9O7AhogM', '☕ Cozy Cafe Ambience', 'Rainy Street Jazz Ambience — Smooth piano jazz for study')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">☕</div>
         <div class="playlist-info">
-          <p class="playlist-title">Ambient Sounds</p>
-          <p class="playlist-desc">Peaceful ambient music for deep work</p>
+          <p class="playlist-title">Cozy Cafe Ambience</p>
+          <p class="playlist-desc">Rainy street jazz ambience — smooth piano</p>
         </div>
       </div>
 
-      <!-- Classical Music -->
-      <div class="playlist-card" onclick="loadPlaylist('mdJU5ogrPMY', '🎹 Classical Focus', 'Timeless classical pieces for concentration')">
-        <div class="playlist-thumb" style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🎹</div>
-        <div class="playlist-info">
-          <p class="playlist-title">Classical Focus</p>
-          <p class="playlist-desc">Timeless classical pieces for concentration</p>
-        </div>
-      </div>
-
-      <!-- Study Music -->
-      <div class="playlist-card" onclick="loadPlaylist('wZVpusDUXbk', '📚 Study Beats', 'Upbeat study music to boost productivity')">
+      <!-- Study Playlist (soft) -->
+      <div class="playlist-card" onclick="loadPlaylist('wZVpusDUXbk', '📚 Let\'s Focus Softly', 'Slow life sound — soft study playlist')">
         <div class="playlist-thumb" style="background:linear-gradient(135deg, #fa709a 0%, #fee140 100%);">📚</div>
         <div class="playlist-info">
-          <p class="playlist-title">Study Beats</p>
-          <p class="playlist-desc">Upbeat study music to boost productivity</p>
+          <p class="playlist-title">Let's Focus Softly</p>
+          <p class="playlist-desc">Slow life sound — gentle study beats</p>
         </div>
       </div>
 
-      <!-- Rain & Nature Sounds -->
-      <div class="playlist-card" onclick="loadPlaylist('mPZkdNFkNps', '🌧️ Rain & Nature', 'Calming nature sounds and rain')">
+      <!-- Rain noises / Heavy Rain -->
+      <div class="playlist-card" onclick="loadPlaylist('mPZkdNFkNps', '🌧️ Rain Sound on Window', 'Relaxing ambience ASMR — heavy rain with thunder')">
         <div class="playlist-thumb" style="background:linear-gradient(135deg, #30cfd0 0%, #330867 100%);">🌧️</div>
         <div class="playlist-info">
-          <p class="playlist-title">Rain & Nature</p>
-          <p class="playlist-desc">Calming nature sounds and rain</p>
+          <p class="playlist-title">Rain Sound on Window</p>
+          <p class="playlist-desc">Relaxing ambience ASMR — heavy rain & thunder</p>
         </div>
       </div>
 
-      <!-- Synthwave/Chillwave -->
-      <div class="playlist-card" onclick="loadPlaylist('TlWYgGyNnJo', '🌅 Synthwave Chill', 'Modern electronic focus music')">
-        <div class="playlist-thumb" style="background:linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">🌅</div>
+      <!-- Synthwave / Lofi Girl -->
+      <div class="playlist-card" onclick="loadPlaylist('TlWYgGyNnJo', '🌌 1 A.M Chill Session', 'Lofi Girl — synthwave chill session')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">🌌</div>
         <div class="playlist-info">
-          <p class="playlist-title">Synthwave Chill</p>
-          <p class="playlist-desc">Modern electronic focus music</p>
+          <p class="playlist-title">1 A.M Chill Session</p>
+          <p class="playlist-desc">Lofi Girl — synthwave / chill</p>
         </div>
       </div>
     </div>
@@ -200,7 +191,7 @@
   <script>
     let currentPlayer = null;
 
-    function loadPlaylist(contentId, title, description, isPlaylist = true) {
+    function loadPlaylist(contentId, title, description, isPlaylist = false) {
       const playerContainer = document.getElementById('playerContainer');
       
       // Create YouTube embed for playlist or single video
