@@ -398,6 +398,39 @@ circle {
   }
 }
 
+/* Accent color variables (can be overridden per-user via inline style) */
+:root {
+  --accent-color: #6ECF9A;
+  --accent-variant: #5ab880;
+}
+
+/* Lightweight overrides to use the accent variable in key places */
+.nav-title { color: var(--accent-color) !important; }
+.nav-link.active, .nav-link:hover { color: var(--accent-color) !important; }
+.clock-number, .digital-time { color: var(--accent-color) !important; }
+.hour-hand, .minute-hand, .clock-center { stroke: var(--accent-color) !important; fill: var(--accent-color) !important; }
+.streak-card { background: linear-gradient(135deg, var(--accent-variant) 0%, var(--accent-color) 100%) !important; }
+.controls button, .btn { background-color: var(--accent-color) !important; }
+.controls button:hover, .btn:hover { background-color: var(--accent-variant) !important; }
+.claim-btn { background: var(--accent-color) !important; }
+.claim-btn.disabled { background: #ddd !important; color: #777 !important; }
+
+/* Theme classes for page-level variants (seasonal examples) */
+body.christmas {
+  background: linear-gradient(180deg, #fffaf0 0%, #fff1f0 100%);
+  --accent-color: #c0392b; /* warm red */
+  --accent-variant: #27ae60; /* green accent */
+}
+
+body.halloween {
+  background: linear-gradient(180deg, #1f1b2e 0%, #332741 100%);
+  color: #f3e6d8;
+  --accent-color: #ff7518; /* pumpkin orange */
+  --accent-variant: #8b5a2b; /* muted brown */
+}
+
+body.default { /* keep default pastel look */ }
+
 @media (max-width: 600px) {
   .home-container {
     margin-top: 30px;

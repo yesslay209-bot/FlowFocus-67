@@ -2,5 +2,12 @@
     "streak": 0,
     "completed_sessions": 0,
     "quiz_history": [],
-    "focus_history": []
+    "focus_history": [],
+    "collection": [],
+    "available_options": [],
+    "available_date": "",
+    "available_claimed": false,
+    "selected_bunny": null,
+    "theme": "christmas",
+    "pastel_color": "#F9DBCE"
 }

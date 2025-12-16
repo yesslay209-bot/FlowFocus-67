@@ -58,10 +58,10 @@
     }
   </style>
 </head>
-<body>
+<body class="{{ user_data.theme }}" style="--accent-color: {{ user_data.pastel_color }}; --accent-variant: {{ user_data.pastel_color }}">
   <nav class="navbar">
     <div class="nav-left">
-      <img src="{{ url_for('static', filename='bunny.png') }}" alt="Logo" class="nav-logo">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="nav-logo">
       <span class="nav-title">FocusFlow</span>
     </div>
     <div class="nav-right">
@@ -69,7 +69,7 @@
       <a href="{{ url_for('pomo') }}" class="nav-link">Pomo</a>
       <a href="{{ url_for('bunnies_page') }}" class="nav-link active">Bunny Streak</a>
       <a href="{{ url_for('music') }}" class="nav-link">Music</a>
-      <a href="#" class="nav-link">Settings</a>
+      <a href="{{ url_for('settings') }}" class="nav-link">Settings</a>
     </div>
   </nav>
 
@@ -118,7 +118,7 @@
                     <img src="{{ url_for('static', filename=b.image) }}" alt="{{ b.name }}" style="width:100%;height:120px;object-fit:cover;margin-bottom:4px;" />
                     <div class="card-name">{{ b.name }}</div>
                     <div class="card-desc">{{ b.desc }}</div>
-                    {% if not user_data.available_claimed and user_data.streak >= b.unlock_streak %}
+                    {% if not user_data.available_claimed and (user_data.streak >= b.unlock_streak or user_data.collection|length == 0) %}
                       <button class="claim-btn" onclick="claimCard('{{ b.id }}')">Claim</button>
                     {% elif not user_data.available_claimed and user_data.streak < b.unlock_streak %}
                       <button class="claim-btn disabled" disabled>Locked</button>
@@ -161,7 +161,7 @@
         </div>
         <div style="display:flex;gap:4px;">
           <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1;padding:6px;border:1px solid #ddd;border-radius:6px;font-size:12px;" />
-          <button onclick="sendChat()" style="padding:6px 10px;background:#6ECF9A;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Send</button>
+          <button onclick="sendChat()" class="btn" style="padding:6px 10px;border-radius:6px;">Send</button>
         </div>
       </div>
     </aside>

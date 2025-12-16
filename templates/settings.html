@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings - FocusFlow</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .settings-container{max-width:900px;margin:40px auto;padding:20px}
+    .palette{display:flex;gap:12px;flex-wrap:wrap}
+    .color-swatch{width:48px;height:48px;border-radius:8px;cursor:pointer;border:2px solid transparent}
+    .color-swatch.selected{outline:3px solid rgba(0,0,0,0.08)}
+    .theme-select{display:flex;gap:12px;margin-top:12px}
+    .save-btn{margin-top:18px;padding:10px 16px;border-radius:8px;border:none;background:var(--accent-color);color:#fff}
+  </style>
+</head>
+<body class="{{ user_data.theme }}" style="--accent-color: {{ user_data.pastel_color }}; --accent-variant: {{ user_data.pastel_color }}">
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="nav-logo">
+      <span class="nav-title">FocusFlow</span>
+    </div>
+    <div class="nav-right">
+      <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+      <a href="{{ url_for('pomo') }}" class="nav-link">Pomo</a>
+      <a href="{{ url_for('bunnies_page') }}" class="nav-link">Bunny Streak</a>
+      <a href="{{ url_for('music') }}" class="nav-link">Music</a>
+      <a href="{{ url_for('settings') }}" class="nav-link active">Settings</a>
+    </div>
+  </nav>
+
+  <div class="settings-container">
+    <h1>Settings</h1>
+    <p>Customize a pastel accent color and choose a theme. Only pastel colors are allowed.</p>
+
+    <h3>Pastel Palette</h3>
+    <div class="palette" id="palette">
+      <!-- pastel options -->
+      <div class="color-swatch" data-color="#FFD6D6" style="background:#FFD6D6"></div>
+      <div class="color-swatch" data-color="#E6E6FF" style="background:#E6E6FF"></div>
+      <div class="color-swatch" data-color="#D6F0FF" style="background:#D6F0FF"></div>
+      <div class="color-swatch" data-color="#F9DBCE" style="background:#F9DBCE"></div>
+      <div class="color-swatch" data-color="#E5F9E5" style="background:#E5F9E5"></div>
+      <div class="color-swatch" data-color="#FAF1C9" style="background:#FAF1C9"></div>
+      <div class="color-swatch" data-color="#FBF7F9" style="background:#FBF7F9"></div>
+      <div class="color-swatch" data-color="#6ECF9A" style="background:#6ECF9A"></div>
+    </div>
+
+    <h3 style="margin-top:16px">Theme</h3>
+    <div class="theme-select">
+      <label><input type="radio" name="theme" value="default" {% if user_data.theme=='default' %}checked{% endif %}> Default</label>
+      <label><input type="radio" name="theme" value="christmas" {% if user_data.theme=='christmas' %}checked{% endif %}> Christmas</label>
+      <label><input type="radio" name="theme" value="halloween" {% if user_data.theme=='halloween' %}checked{% endif %}> Halloween</label>
+    </div>
+
+    <h3 style="margin-top:16px">Bunny Options</h3>
+    <p>You can choose any bunny on the first day and later customize bunnies (coming soon).</p>
+
+    <button class="save-btn" id="saveBtn">Save Settings</button>
+  </div>
+
+<script>
+  const swatches = document.querySelectorAll('.color-swatch');
+  let selectedColor = '{{ user_data.pastel_color }}';
+  swatches.forEach(s => {
+    if(s.dataset.color === selectedColor) s.classList.add('selected');
+    s.addEventListener('click', () => {
+      swatches.forEach(x => x.classList.remove('selected'));
+      s.classList.add('selected');
+      selectedColor = s.dataset.color;
+    })
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    const theme = document.querySelector('input[name="theme"]:checked').value;
+    const res = await fetch('/save_settings', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({pastel_color: selectedColor, theme})
+    });
+    const data = await res.json();
+    if(res.ok) {
+      // apply immediately
+      document.body.style.setProperty('--accent-color', selectedColor);
+      alert('Settings saved');
+      location.reload();
+    } else {
+      alert('Could not save settings');
+    }
+  });
+</script>
+</body>
+</html>

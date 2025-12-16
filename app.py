@@ -50,7 +50,9 @@ def load_data():
                 "available_options": [],
                 "available_date": "",
                 "available_claimed": False,
-                "selected_bunny": None
+                "selected_bunny": None,
+                "theme": "default",
+                "pastel_color": "#6ECF9A"
             }, f, indent=4)
     with open(DATA_FILE, "r") as f:
         data = json.load(f)
@@ -60,6 +62,8 @@ def load_data():
     data.setdefault("available_date", "")
     data.setdefault("available_claimed", False)
     data.setdefault("selected_bunny", None)
+    data.setdefault("theme", "default")
+    data.setdefault("pastel_color", "#6ECF9A")
     return data
 
 def save_data(data):
@@ -76,7 +80,8 @@ def home():
                            quote_focus=quote_focus,
                            quote_break=quote_break,
                            sessions=user_data["completed_sessions"],
-                           streak=user_data["streak"])
+                           streak=user_data["streak"],
+                           user_data=user_data)
 
 @app.route("/complete", methods=["POST"])
 def complete_session():
@@ -143,8 +148,12 @@ def claim_card():
     card = next((b for b in BUNNIES if b['id'] == card_id), None)
     if not card:
         return jsonify({'error': 'Unknown card'}), 400
-    if data.get('streak', 0) < card.get('unlock_streak', 0):
-        return jsonify({'error': 'Streak too low to claim this card'}), 400
+    # Allow the user to choose any available option on their very first claim (no collection yet)
+    if not data.get('collection'):
+        pass
+    else:
+        if data.get('streak', 0) < card.get('unlock_streak', 0):
+            return jsonify({'error': 'Streak too low to claim this card'}), 400
 
     # add to collection
     if card_id not in data['collection']:
@@ -215,12 +224,34 @@ def pomo():
                            quote_focus=quote_focus,
                            quote_break=quote_break,
                            sessions=user_data["completed_sessions"],
-                           streak=user_data["streak"])
+                           streak=user_data["streak"],
+                           user_data=user_data)
 
 
 @app.route("/music")
 def music():
-    return render_template("music.html")
+    user_data = load_data()
+    return render_template("music.html", user_data=user_data)
+
+
+@app.route('/settings')
+def settings():
+    user_data = load_data()
+    return render_template('settings.html', user_data=user_data)
+
+
+@app.route('/save_settings', methods=['POST'])
+def save_settings():
+    payload = request.get_json() or {}
+    color = payload.get('pastel_color')
+    theme = payload.get('theme')
+    data = load_data()
+    if color:
+        data['pastel_color'] = color
+    if theme:
+        data['theme'] = theme
+    save_data(data)
+    return jsonify({'success': True, 'data': data})
 
 
 if __name__ == "__main__":

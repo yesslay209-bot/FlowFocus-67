@@ -6,7 +6,7 @@
   <title>FocusFlow by Grace Chen</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
+<body class="{{ user_data.theme }}" style="--accent-color: {{ user_data.pastel_color }}; --accent-variant: {{ user_data.pastel_color }}">
 
   <!-- 🌸 Navbar -->
   <nav class="navbar">
@@ -19,7 +19,7 @@
       <a href="{{ url_for('pomo') }}" class="nav-link">Pomo</a>
       <a href="{{ url_for('bunnies_page') }}" class="nav-link">Bunny Streak</a>
       <a href="{{ url_for('music') }}" class="nav-link">Music</a>
-      <a href="#" class="nav-link">Settings</a>
+      <a href="{{ url_for('settings') }}" class="nav-link">Settings</a>
     </div>
   </nav>
 
@@ -95,7 +95,7 @@
         </div>
         <div style="display:flex;gap:4px;">
           <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1;padding:6px;border:1px solid #ddd;border-radius:6px;font-size:12px;" />
-          <button onclick="sendChat()" style="padding:6px 10px;background:#6ECF9A;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px;">Send</button>
+          <button onclick="sendChat()" class="btn" style="padding:6px 10px;border-radius:6px;">Send</button>
         </div>
       </div>
     </div>
