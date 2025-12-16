@@ -52,7 +52,7 @@ def load_data():
                 "available_claimed": False,
                 "selected_bunny": None,
                 "theme": "default",
-                "pastel_color": "#6ECF9A"
+                "pastel_color": "#f08c9b"
             }, f, indent=4)
     with open(DATA_FILE, "r") as f:
         data = json.load(f)
@@ -63,7 +63,7 @@ def load_data():
     data.setdefault("available_claimed", False)
     data.setdefault("selected_bunny", None)
     data.setdefault("theme", "default")
-    data.setdefault("pastel_color", "#6ECF9A")
+    data.setdefault("pastel_color", "#f08c9b")
     return data
 
 def save_data(data):

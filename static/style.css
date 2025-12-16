@@ -400,8 +400,8 @@ circle {
 
 /* Accent color variables (can be overridden per-user via inline style) */
 :root {
-  --accent-color: #6ECF9A;
-  --accent-variant: #5ab880;
+  --accent-color: #f08c9b;
+  --accent-variant: #f9c5d1;
 }
 
 /* Lightweight overrides to use the accent variable in key places */
@@ -417,9 +417,13 @@ circle {
 
 /* Theme classes for page-level variants (seasonal examples) */
 body.christmas {
-  background: linear-gradient(180deg, #fffaf0 0%, #fff1f0 100%);
-  --accent-color: #c0392b; /* warm red */
-  --accent-variant: #27ae60; /* green accent */
+  /* candy-cane / festive stripes plus soft background
+     stripes: white and pale red; accent switches to classic red+green */
+  background-image: repeating-linear-gradient(45deg, #ffffff 0 14px, #ffecec 14px 28px);
+  background-color: #fff5f5;
+  --accent-color: #c0392b; /* Christmas red */
+  --accent-variant: #27ae60; /* Christmas green */
+  color: #3b1f1f;
 }
 
 body.halloween {
