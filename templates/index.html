@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FocusFlow by Grace Chen</title>
+  <title>FocusFlow</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body class="{{ user_data.theme }}" style="--accent-color: {{ user_data.pastel_color }}; --accent-variant: {{ user_data.pastel_color }}">
@@ -31,7 +31,7 @@
       <!-- Logo and Title -->
       <div class="home-header">
         <h1 class="home-title">FocusFlow</h1>
-        <p class="home-subtitle">by Grace Chen</p>
+        <p class="home-subtitle">by <span style="color: rgb(255, 142, 197);">Grace Chen</span></p>
       </div>
 
       <!-- Quote Section -->
@@ -43,9 +43,16 @@
       <div class="pet-bunny-box">
         <h3 class="pet-title">Your Pet Bunny</h3>
         <div class="bunny-container">
-          <img src="{{ url_for('static', filename='bunny.png') }}" alt="Pet Bunny" class="pet-bunny" id="bunny">
+          <p> Maintain a study streak to unlock bunnies!</p>
+          <!-- <img src="{{ url_for('static', filename=user_data.bunny_image) }}" alt="Pet Bunny" class="pet-bunny" id="bunny"> -->
+
         </div>
       </div>
+
+      <div>
+        <button class = "win-button"> <a href="https://www.tiktok.com/@tyrese_eee/video/6999430350057360641">Win a Mega neon fly ride bat dragon</a></button>
+      </div>
+
     </div>
 
     <!-- RIGHT SIDE -->
@@ -88,17 +95,7 @@
       </div>
 
       <!-- Chat Box -->
-      <div style="background:#fff;padding:12px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.08);display:flex;flex-direction:column;height:320px;margin-top:12px;">
-        <h3 style="margin:0 0 8px 0;font-size:14px;">Focus Buddy 💬</h3>
-        <div id="chatbox" style="flex:1;overflow-y:auto;border:1px solid #eee;border-radius:8px;padding:8px;margin-bottom:8px;background:#f9f9f9;">
-          <div style="font-size:12px;color:#999;text-align:center;padding:8px;">Ask for help or motivation!</div>
-        </div>
-        <div style="display:flex;gap:4px;">
-          <input type="text" id="chatInput" placeholder="Type a message..." style="flex:1;padding:6px;border:1px solid #ddd;border-radius:6px;font-size:12px;" />
-          <button onclick="sendChat()" class="btn" style="padding:6px 10px;border-radius:6px;">Send</button>
-        </div>
-      </div>
-    </div>
+  
 
   </div> <!-- ✅ END home-container -->
 
