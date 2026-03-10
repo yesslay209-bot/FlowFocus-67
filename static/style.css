@@ -7,11 +7,12 @@
 
 /* 🌸 Global */
 body {
-  background: linear-gradient(180deg, #fffaf0 0%, #ffe6ea 100%);
+  background: linear-gradient(180deg, #fffaf0 0%, #ffced6 100%);
   font-family: "CozyFont", "Poppins", sans-serif;
   color: #444;
   margin: 0;
   padding: 0;
+  padding-top: 70px;
 }
 
 /* 🌸 Navbar */
@@ -24,10 +25,13 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 10;
 }
+
 
 .nav-left {
   display: flex;
@@ -36,7 +40,7 @@ body {
 }
 
 .nav-logo {
-  width: 40px;
+  width: 50px;
   animation: hop 2s infinite ease-in-out;
 }
 
@@ -100,6 +104,22 @@ body {
   text-align: center;
   width: 400px;
   backdrop-filter: blur(10px);
+}
+.win-button {
+  background-color: #fab4c5;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 20px;
+  margin: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: "CozyFont", sans-serif;
+}
+
+a {
+  text-decoration: none;
+  color: #000000;
 }
 
 .title {
@@ -427,10 +447,11 @@ body.christmas {
 }
 
 body.halloween {
-  background: linear-gradient(180deg, #1f1b2e 0%, #332741 100%);
-  color: #f3e6d8;
-  --accent-color: #ff7518; /* pumpkin orange */
-  --accent-variant: #8b5a2b; /* muted brown */
+  /* Warm pumpkin theme for Halloween */
+  background: linear-gradient(180deg, #ffe8d1 0%, #ffd4a3 100%);
+  color: #5c3317;
+  --accent-color: #ff8c42; /* bright pumpkin orange */
+  --accent-variant: #6b4423; /* warm brown */
 }
 
 body.default { /* keep default pastel look */ }
