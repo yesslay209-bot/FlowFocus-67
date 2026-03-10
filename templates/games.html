@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>games</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+    .music-container {
+      max-width:1200px;
+      margin:0 auto;
+      padding:20px;
+    }
+    .playlist-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+      gap:20px;
+      margin-top:20px;
+    }
+    .playlist-card {
+      background:#fff;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      cursor:pointer;
+      transition:transform 0.2s, box-shadow 0.2s;
+    }
+    .playlist-card:hover {
+      transform:translateY(-4px);
+      box-shadow:0 8px 20px rgba(0,0,0,0.12);
+    }
+    .playlist-thumb {
+      width:100%;
+      height:160px;
+      background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:48px;
+    }
+    .playlist-info {
+      padding:16px;
+    }
+    .playlist-title {
+      font-size:16px;
+      font-weight:600;
+      margin:0 0 8px 0;
+    }
+    .playlist-desc {
+      font-size:13px;
+      color:#666;
+      margin:0;
+    }
+    .player-section {
+      background:#fff;
+      border-radius:12px;
+      padding:20px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom:30px;
+    }
+    .player-section h2 {
+      margin-top:0;
+    }
+    .youtube-player {
+      width:100%;
+      aspect-ratio:16/9;
+      border-radius:8px;
+      overflow:hidden;
+      margin-top:12px;
+    }
+    .controls {
+      display:flex;
+      gap:10px;
+      margin-top:16px;
+    }
+    .btn {
+      padding:10px 16px;
+      background:#6ECF9A;
+      color:#fff;
+      border:none;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:14px;
+      transition:background 0.2s;
+    }
+    .btn:hover {
+      background:#5ab880;
+    }
+    .btn-secondary {
+      background:#ddd;
+      color:#333;
+    }
+    .btn-secondary:hover {
+      background:#ccc;
+    }
+  </style>
+    
+</head>
+<body>
+    
+    <!-- 🌸 Navbar -->
+  <nav class="navbar">
+    <div class="nav-left">
+      <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="nav-logo">
+      <span class="nav-title">FocusFlow</span>
+    </div>
+    <div class="nav-right">
+      <a href="{{ url_for('home') }}" class="nav-link">Home</a>
+      <a href="{{ url_for('pomo') }}" class="nav-link">Pomo</a>
+      <a href="{{ url_for('bunnies_page') }}" class="nav-link">Bunny Streak</a>
+      <a href="{{ url_for('music') }}" class="nav-link active">Music</a>
+
+      <a href="{{ url_for('settings') }}" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+    <div class="game-container">
+    <h1>🎮 Bunny Game</h1>
+    <p>Choose a game to help you stay focused and motivated</p>
+
+    <!-- Playlist Grid -->
+    <h2>Available Games</h2>
+    <div class="playlist-grid">
+      <!-- Classical Music (HALIDONMUSIC) -->
+      <div class="playlist-card" onclick="loadPlaylist('mdJU5ogrPMY', '🎹 Classical Music for Studying', 'HALIDONMUSIC — Classical pieces for focus')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">🎹</div>
+        <div class="playlist-info">
+          <p class="playlist-title">bunny.io</p>
+          <p class="playlist-desc">Paper IO is an exciting multiplayer game challenging players to expand their territory.
+
+</p>
+        </div>
+      </div>
+
+      <!-- Lo-Fi Hip Hop -->
+      <div class="playlist-card" onclick="loadPlaylist('T9pQjiZPJi0', '🎧 Lo-Fi Hip Hop', 'Slow life sound — Unlock Hyper Focus with this Studycore playlist')">
+        <div class="playlist-thumb" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎧</div>
+        <div class="playlist-info">
+          <p class="playlist-title">Lo-Fi Hip Hop</p>
+          <p class="playlist-desc">Slow life sound — Studycore playlist</p>
+        </div>
+      </div>
+
+    
+   
+    </div>
+    
+</body>
+</html>

@@ -234,6 +234,12 @@ def music():
     return render_template("music.html", user_data=user_data)
 
 
+@app.route("/games")
+def games():
+    user_data = load_data()
+    return render_template("games.html", user_data=user_data)
+
+
 @app.route('/settings')
 def settings():
     user_data = load_data()
@@ -255,4 +261,4 @@ def save_settings():
 
 
 if __name__ == "__main__":
-    app.run(port=5001, debug=True)
+    app.run(port=6007, debug=True)
