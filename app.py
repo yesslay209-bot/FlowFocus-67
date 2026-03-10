@@ -17,7 +17,17 @@ QUOTES_FOCUS = [
     "Small steps make big dreams bloom.",
     "Focus like the gentle flow of a stream.",
     "You’re doing amazing — one moment at a time.",
-    "Every minute of focus is a gift to your future self."
+    "Every minute of focus is a gift to your future self.",
+    "Rest is part of progress.",
+    "You’re doing enough. Take a moment.",
+    "Even stars dim to shine again.",
+    "You deserve a calm pause.",
+    "Breathe. You don’t need to solve everything today.",
+    "It’s okay to slow down.",
+    "Your mind needs soft moments too.",
+    "Be gentle with yourself. You’re trying.",
+    "A short rest can reset everything.",
+    "You grow even when you’re still.",
 ]
 
 QUOTES_BREAK = [
