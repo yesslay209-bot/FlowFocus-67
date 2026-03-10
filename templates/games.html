@@ -108,8 +108,8 @@
       <a href="{{ url_for('home') }}" class="nav-link">Home</a>
       <a href="{{ url_for('pomo') }}" class="nav-link">Pomo</a>
       <a href="{{ url_for('bunnies_page') }}" class="nav-link">Bunny Streak</a>
-      <a href="{{ url_for('music') }}" class="nav-link active">Music</a>
-
+      <a href="{{ url_for('music') }}" class="nav-link">Music</a>
+      <a href="{{ url_for('games') }}" class="nav-link active">Games</a>
       <a href="{{ url_for('settings') }}" class="nav-link">Settings</a>
     </div>
   </nav>
@@ -121,24 +121,18 @@
     <!-- Playlist Grid -->
     <h2>Available Games</h2>
     <div class="playlist-grid">
-      <!-- Classical Music (HALIDONMUSIC) -->
-      <div class="playlist-card" onclick="loadPlaylist('mdJU5ogrPMY', '🎹 Classical Music for Studying', 'HALIDONMUSIC — Classical pieces for focus')">
+      <!-- Go to the Bunny.io game page -->
+      <a href="{{ url_for('bunny_io') }}" class="playlist-card" style="text-decoration:none;color:inherit;">
         <div class="playlist-thumb" style="background:linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">👾</div>
         <div class="playlist-info">
           <p class="playlist-title">bunny.io</p>
           <p class="playlist-desc">Paper IO is an exciting multiplayer game challenging players to expand their territory.</p>
         </div>
-      </div>
+      </a>
 
-      <!-- Lo-Fi Hip Hop -->
-      <div class="playlist-card" onclick="loadPlaylist('T9pQjiZPJi0', '🎧 Lo-Fi Hip Hop', 'Slow life sound — Unlock Hyper Focus with this Studycore playlist')">
-        <div class="playlist-thumb" style="background:linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎧</div>
-        <div class="playlist-info">
-          <p class="playlist-title">Lo-Fi Hip Hop</p>
-          <p class="playlist-desc">Slow life sound — Studycore playlist</p>
-        </div>
-      </div>
 
+
+      
     
    
     </div>

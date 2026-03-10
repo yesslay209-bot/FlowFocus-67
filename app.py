@@ -141,6 +141,7 @@ def bunnies_page():
     return render_template("bunnies.html", bunnies=BUNNIES, user_data=user_data)
 
 
+
 @app.route('/claim_card', methods=['POST'])
 def claim_card():
     payload = request.get_json() or {}
@@ -249,6 +250,12 @@ def games():
     user_data = load_data()
     return render_template("games.html", user_data=user_data)
 
+@app.route("/bunny_io")
+def bunny_io():
+    user_data = load_data()
+    selected = user_data.get("selected_bunny")
+    bunny = next((b for b in BUNNIES if b["id"] == selected), BUNNIES[0])
+    return render_template("game_bunny_io.html", bunny=bunny, user_data=user_data)
 
 @app.route('/settings')
 def settings():
